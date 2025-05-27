@@ -8,10 +8,10 @@
   tasks:
     - name: Buscar VLAN pelo VID
       uri:
-        url: "{{ netbox_url }}/api/ipam/vlans/?vid={{ vlan_vid }}"
+        url: "{{ NETBOX_URL }}/api/ipam/vlans/?vid={{ vlan_vid }}"
         method: GET
         headers:
-          Authorization: "Token {{ netbox_token }}"
+          Authorization: "Token {{ NETBOX_TOKEN }}"
         return_content: true
         validate_certs: no
       register: vlan_response
@@ -27,7 +27,7 @@
 
     - name: Buscar prefixo associado à VLAN
       uri:
-        url: "{{ netbox_url }}/api/ipam/prefixes/?vlan_id={{ vlan_id }}"
+        url: "{{ NETBOX_URL }}/api/ipam/prefixes/?vlan_id={{ vlan_id }}"
         method: GET
         headers:
           Authorization: "Token {{ netbox_token }}"
@@ -48,10 +48,10 @@
 
     - name: Buscar IP disponível no prefixo
       uri:
-        url: "{{ netbox_url }}/api/ipam/prefixes/{{ prefix_id }}/available-ips/"
+        url: "{{ NETBOX_URL }}/api/ipam/prefixes/{{ prefix_id }}/available-ips/"
         method: POST
         headers:
-          Authorization: "Token {{ netbox_token }}"
+          Authorization: "Token {{ NETBOX_TOKEN }}"
           Content-Type: "application/json"
         return_content: true
         status_code: 201
