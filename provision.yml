@@ -33,12 +33,12 @@
         networks:
           - name: "VLAN1214"
             type: static
-            ip: 10.166.96.102
+            ip: 10.166.96.130
             netmask: 255.255.252.0
             gateway: 10.166.99.254
         customization:
           existing_vm: True
-          hostname: "VM-7CTA-7CTA-ANSIBLE-AWX"
+          hostname: "{{ vm_name }}"
           dns_servers:
             - 10.166.64.193
             - 10.166.64.194
