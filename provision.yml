@@ -12,9 +12,9 @@
   tasks:     
     - name: Clonar nova VM de {{vm_template}} no VCenter {{vcenter_hostname}} 
       vmware_guest:
-        hostname: "{{ vcenter7_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
+        #hostname: "{{ vcenter7_hostname }}"
+        #username: "{{ vcenter_username }}"
+        #password: "{{ vcenter_password }}"
         validate_certs: false
         datacenter: "DC1-EB"
         folder: "vm/LABORATORIOS"
