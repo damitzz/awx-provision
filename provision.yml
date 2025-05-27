@@ -1,0 +1,46 @@
+
+- name: Clonar VM a partir de template no vCenter
+  hosts: all
+  gather_facts: false
+  connection: local
+  collections:
+    - community.vmware
+
+  vars_files:
+    - ../vars/vm_config2.yml
+        
+  tasks:     
+    - name: Clonar nova VM de {{vm_template}} no VCenter {{vcenter_hostname}} 
+      vmware_guest:
+        hostname: "{{ vcenter7_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "DC1-EB"
+        folder: "vm/LABORATORIOS"
+        template: "VM-7CTA-TEMPLATE-UBUNTU-24"
+        name: "{{ vm_name }}"
+        cluster: "EMC-PowerEdge"
+        datastore: "atualizacao_vxrail2"
+        state: poweredon
+        hardware:
+          num_cpus: 2
+          # num_cpu_cores_per_socke: 2
+          memory_mb: 4096
+          hotadd_cpu: True
+          hotremove_cpu: True
+          hotadd_memory: True
+        networks:
+          - name: "VLAN1214"
+            type: static
+            ip: 10.166.96.102
+            netmask: 255.255.252.0
+            gateway: 10.166.99.254
+        customization:
+          existing_vm: True
+          hostname: "VM-7CTA-7CTA-ANSIBLE-AWX"
+          dns_servers:
+            - 10.166.64.193
+            - 10.166.64.194
+        wait_for_ip_address: yes
+      delegate_to: localhost
