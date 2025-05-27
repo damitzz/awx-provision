@@ -1,2 +1,6 @@
 - name: teste
-  shell: echo "{{ NETBOX_API }}"
+  #shell: echo "{{ NETBOX_API }}"
+  tasks:
+    - name: teste
+      shell: echo "{{ NETBOX_API }}"
+    
