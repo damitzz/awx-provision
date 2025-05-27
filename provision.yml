@@ -33,9 +33,9 @@
         networks:
           - name: "VLAN1214"
             type: static
-            ip: 10.166.96.130
-            netmask: 255.255.252.0
-            gateway: 10.166.99.254
+            ip: "{{ vm_ip }}"
+            netmask: "{{ vm_netmask }}"
+            gateway: "{{ vm_gateway }}"
             start_connected: yes
             connected: yes
         customization:
