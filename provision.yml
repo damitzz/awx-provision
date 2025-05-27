@@ -36,6 +36,8 @@
             ip: 10.166.96.130
             netmask: 255.255.252.0
             gateway: 10.166.99.254
+            start_connected: yes
+            connected: yes
         customization:
           existing_vm: True
           hostname: "{{ vm_name }}"
