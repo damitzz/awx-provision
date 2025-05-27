@@ -1,0 +1,66 @@
+- name: Buscar IP disponível a partir do VID da VLAN
+  hosts: localhost
+  gather_facts: false
+  vars:
+    
+    vlan_vid: 1214  # <-- Só o número da VLAN
+
+  tasks:
+    - name: Buscar VLAN pelo VID
+      uri:
+        url: "{{ netbox_url }}/api/ipam/vlans/?vid={{ vlan_vid }}"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        return_content: true
+        validate_certs: no
+      register: vlan_response
+
+    - name: Verificar se a VLAN foi encontrada
+      fail:
+        msg: "VLAN com VID={{ vlan_vid }} não encontrada"
+      when: vlan_response.json.results | length == 0
+
+    - name: Definir ID da VLAN
+      set_fact:
+        vlan_id: "{{ vlan_response.json.results[0].id }}"
+
+    - name: Buscar prefixo associado à VLAN
+      uri:
+        url: "{{ netbox_url }}/api/ipam/prefixes/?vlan_id={{ vlan_id }}"
+        method: GET
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        return_content: true
+        validate_certs: no
+      register: prefix_response
+
+    - name: Verificar se prefixo foi encontrado
+      fail:
+        msg: "Nenhum prefixo associado à VLAN {{ vlan_vid }}"
+      when: prefix_response.json.results | length == 0
+
+    - name: Definir prefixo e gateway
+      set_fact:
+        prefix_id: "{{ prefix_response.json.results[0].id }}"
+        prefix: "{{ prefix_response.json.results[0].prefix }}"
+        gateway: "{{ prefix_response.json.results[0].custom_fields.gateway.address | default('N/A') }}"
+
+    - name: Buscar IP disponível no prefixo
+      uri:
+        url: "{{ netbox_url }}/api/ipam/prefixes/{{ prefix_id }}/available-ips/"
+        method: POST
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+          Content-Type: "application/json"
+        return_content: true
+        status_code: 201
+        validate_certs: no
+      register: ip_response
+
+    - name: Exibir IP disponível, máscara e gateway
+      debug:
+        msg: >
+          IP disponível: {{ ip_response.json.address }},
+          Máscara: {{ prefix.split('/')[1] }},
+          Gateway: {{ gateway }}
