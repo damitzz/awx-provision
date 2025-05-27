@@ -2,14 +2,12 @@
   hosts: localhost
   gather_facts: false
   vars:
-    
     vlan_vid: 1214  # <-- Só o número da VLAN
-  extra_vars:
-    NETBOX_API: "{{ NETBOX_API }}"
-    NETBOX_TOKEN: "{{ NETBOX_TOKEN }}"
-   
+  
 
   tasks:
+    - name: teste
+      shell: echo "{{ NETBOX_API }}"
     - name: Buscar VLAN pelo VID
       uri:
         url: "{{ NETBOX_API }}/api/ipam/vlans/?vid={{ vlan_vid }}"
