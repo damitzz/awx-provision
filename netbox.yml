@@ -2,7 +2,8 @@
   hosts: localhost
   gather_facts: false
   vars:
-    
+    NETBOX_API: "{{ NETBOX_API }}"
+    NETBOX_TOKEN: "{{ NETBOX_TOKEN }}"
     vlan_vid: 1214  # <-- Só o número da VLAN
 
   tasks:
