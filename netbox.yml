@@ -30,7 +30,7 @@
         url: "{{ NETBOX_API }}/api/ipam/prefixes/?vlan_id={{ vlan_id }}"
         method: GET
         headers:
-          Authorization: "Token {{ netbox_token }}"
+          Authorization: "Token {{ NETBOX_TOKEN }}"
         return_content: true
         validate_certs: no
       register: prefix_response
